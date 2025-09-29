@@ -10,6 +10,8 @@ import Button from 'primevue/button';
 import Toolbar from 'primevue/toolbar';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import Select from 'primevue/select';
+import DatePicker from 'primevue/datepicker';
 
 // Props
 const props = defineProps({ patients: Array });
@@ -21,8 +23,11 @@ const createDialogVisible = ref(false);
 // Inertia form for new patient
 const form = useForm({
     full_name: '',
-    date_of_birth: '',
+    date_of_birth: null,
     gender: '',
+    contact_number: '',
+    email: '',
+    address: '',
 });
 
 // Open modal
@@ -39,6 +44,12 @@ const savePatient = () => {
         },
     });
 };
+
+const genders = ref([
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+]);
+
 </script>
 
 <template>
@@ -94,42 +105,88 @@ const savePatient = () => {
         >
         <div class="flex flex-col gap-4">
             <div>
-            <label for="full_name" class="block font-semibold mb-2">Full Name</label>
-            <InputText
-                id="full_name"
-                v-model="form.full_name"
-                placeholder="Enter full name"
-                class="w-full"
-            />
-            <div v-if="form.errors.full_name" class="text-red-500 text-sm mt-1">
-                {{ form.errors.full_name }}
-            </div>
-            </div>
-
-            <div>
-            <label for="date_of_birth" class="block font-semibold mb-2">Date of Birth</label>
-            <InputText
-                id="date_of_birth"
-                type="date"
-                v-model="form.date_of_birth"
-                class="w-full"
-            />
-            <div v-if="form.errors.date_of_birth" class="text-red-500 text-sm mt-1">
-                {{ form.errors.date_of_birth }}
-            </div>
+                <label for="full_name" class="block font-semibold mb-2">Full Name</label>
+                <InputText
+                    id="full_name"
+                    v-model="form.full_name"
+                    placeholder="Enter full name"
+                    class="w-full"
+                />
+                <div v-if="form.errors.full_name" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.full_name }}
+                </div>
             </div>
 
             <div>
-            <label for="gender" class="block font-semibold mb-2">Gender</label>
-            <InputText
-                id="gender"
-                v-model="form.gender"
-                placeholder="Male / Female"
-                class="w-full"
-            />
-            <div v-if="form.errors.gender" class="text-red-500 text-sm mt-1">
-                {{ form.errors.gender }}
+                <label for="date_of_birth" class="block font-semibold mb-2">Date of Birth</label>
+                <DatePicker
+                    id="date_of_birth"
+                    v-model="form.date_of_birth"
+                    dateFormat="yy-mm-dd"
+                    showIcon
+                    class="w-full"
+                    :manualInput="false"	
+                />
+                <div v-if="form.errors.date_of_birth" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.date_of_birth }}
+                </div>
             </div>
+
+
+            <div>
+                <label for="gender" class="block font-semibold mb-2">Gender</label>
+                <Select
+                    id="gender"
+                    v-model="form.gender"
+                    :options="genders"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Select Gender"
+                    class="w-full"
+                />
+
+                <div v-if="form.errors.gender" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.gender }}
+                </div>
+            </div>
+
+            <div>
+                <label for="contact_number" class="block font-semibold mb-2">Contact Number</label>
+                <InputText
+                    id="contact_number"
+                    v-model="form.contact_number"
+                    placeholder="07XXXXXXXX"
+                    class="w-full"
+                />
+                <div v-if="form.errors.contact_number" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.contact_number }}
+                </div>
+            </div>
+
+            <div>
+                <label for="email" class="block font-semibold mb-2">Email</label>
+                <InputText
+                    id="email"
+                    v-model="form.email"
+                    placeholder="example@gmail.com"
+                    class="w-full"
+                />
+                <div v-if="form.errors.email" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.email }}
+                </div>
+            </div>
+
+            <div>
+                <label for="address" class="block font-semibold mb-2">address</label>
+                <InputText
+                    id="address"
+                    v-model="form.address"
+                    placeholder="123, Street, City"
+                    class="w-full"
+                />
+                <div v-if="form.errors.address" class="text-red-500 text-sm mt-1">
+                    {{ form.errors.address }}
+                </div>
             </div>
         </div>
 
