@@ -1,6 +1,8 @@
-<script setup></script>
+<script setup>
+import { Button } from 'primevue';
+</script>
 <template>
     <div>
-        Hello from Show Appointment
+        <Button label="Show" />
     </div>
 </template>

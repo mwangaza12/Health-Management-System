@@ -3,9 +3,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Link from '@/Components/Link.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import  DataTable  from 'primevue/datatable';
+import  Column  from 'primevue/column';
+import Button  from 'primevue/button';
+import Toolbar from 'primevue/toolbar';
 
 // Accept props
-const props = defineProps({ patients: Object });
+const props = defineProps({ patients: Array });
 
 // Loading state
 const isLoading = ref(false);
@@ -39,12 +43,13 @@ const handlePageChange = (page) => {
 
         <!-- Create Button -->
         <div class="text-right mb-4">
-            <Link 
+            <!-- <Link 
                 :href="route('patients.create')"
                 class="bg-blue-500 rounded-md text-white font-bold hover:bg-blue-700 p-3"
             >
             Create a patient
-            </Link>
+            </Link> -->
+            <Button label="Create Patient"/>
         </div>
 
         <!-- Loading Indicator -->
@@ -54,48 +59,19 @@ const handlePageChange = (page) => {
         </div>
 
         <!-- patient Table -->
-        <div v-else class="container mx-auto p-4 bg-white shadow-lg rounded-lg">
-            <div class="overflow-x-auto">
-                <table class="min-w-full table-auto">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="px-4 py-2 border">Full Name</th>
-                            <th class="px-4 py-2 border">Date of Birth</th>
-                            <th class="px-4 py-2 border">Gender</th>
-                            <th class="px-4 py-2 border">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="patient in paginatedpatients" :key="patient.id" class="hover:bg-gray-50">
-                            <td class="px-4 py-2 border">{{ patient.full_name }}</td>
-                            <td class="px-4 py-2 border">{{ patient.date_of_birth }}</td>
-                            <td class="px-4 py-2 border">{{ patient.gender }}</td>
-                            <td class="px-4 py-2 border text-center">
-                                <Link :href="route('patients.show', patient.id)" class="text-yellow-500 hover:text-yellow-700">Show</Link>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <Toolbar class="mb-6">
+            <template #start>
+                <Button label="New" icon="pi pi-plus" class="mr-2" @click="openNew" />
+                <Button label="Delete" icon="pi pi-trash" severity="danger" variant="outlined" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />
+            </template>
+        </Toolbar>
 
-            <!-- Pagination -->
-            <div class="mt-4 flex justify-between items-center">
-                <button 
-                    :disabled="currentPage === 1" 
-                    @click="handlePageChange(currentPage - 1)" 
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-                >
-                    Previous
-                </button>
-                <span>Page {{ currentPage }}</span>
-                <button 
-                    :disabled="currentPage * itemsPerPage >= props.patients.length" 
-                    @click="handlePageChange(currentPage + 1)" 
-                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
-        </div>
+        <DataTable v-model:selection="selectedProducts" :value="props.patients" dataKey="id" tableStyle="min-width: 50rem">
+            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            <Column field="full_name" header="Full Name" class="px-4 py-2 border" />
+            <Column field="date_of_birth" header="Date of Birth" class="px-4 py-2 border" />
+            <Column field="gender" header="Gender" class="px-4 py-2 border" />
+
+        </DataTable>
     </AuthenticatedLayout>
 </template>

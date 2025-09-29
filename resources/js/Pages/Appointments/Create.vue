@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SelectInput from '@/Components/SelectInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import Button from 'primevue/button';
 
 const props = defineProps({
     patients: Array,
@@ -121,6 +122,7 @@ const today = new Date().toISOString().split('T')[0]; // Default to today’s da
                     <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Create
                     </PrimaryButton>
+                    <Button label="Create"/>
                 </div>
             </form>
         </div>
